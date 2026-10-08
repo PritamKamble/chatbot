@@ -140,7 +140,7 @@
                 const response = await fetch(`/chat/${encodeURIComponent(text)}`);
                 if (!response.ok) throw new Error('Request failed');
                 const data = await response.json();
-                reply.textContent = data.message;
+                reply.textContent = data.response;
             } catch (error) {
                 reply.textContent = 'Sorry, I could not reach the server. Please try again.';
             }
