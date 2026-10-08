@@ -117,7 +117,7 @@
         const input = document.getElementById('message-input');
         const messages = document.getElementById('messages');
 
-        form.addEventListener('submit', (event) => {
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const text = input.value.trim();
             if (!text) return;
@@ -129,6 +129,22 @@
             input.value = '';
             messages.scrollTop = messages.scrollHeight;
             input.focus();
+
+            const reply = document.createElement('div');
+            reply.className = 'message bot';
+            reply.textContent = '...';
+            messages.appendChild(reply);
+            messages.scrollTop = messages.scrollHeight;
+
+            try {
+                const response = await fetch(`/chat/${encodeURIComponent(text)}`);
+                if (!response.ok) throw new Error('Request failed');
+                const data = await response.json();
+                reply.textContent = data.message;
+            } catch (error) {
+                reply.textContent = 'Sorry, I could not reach the server. Please try again.';
+            }
+            messages.scrollTop = messages.scrollHeight;
         });
     </script>
 </body>
